@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
         integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/style.css" />
-    <script src="assets/js/game.js" type="text/javascript"></script>
+    <script src="assets/js/game.js" type="text/javascript" defer></script>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
                 <img id="hangmanImage" src="" alt="" />
             </div>
             <div class="col-md-6 gameplay-column">
-                <h2>Press Any Key to Get Started!</h2>
+                <h2>Click here to Get Started!</h2>
                 <h4>Wins</h4>
                 <h5 id="totalWins"></h5>
                 <h4>Current Word</h4>
@@ -39,8 +39,8 @@
     </div>
 
     <script>
-        resetGame();
-        updateDisplay();
+        /*      resetGame();
+             updateDisplay(); */
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
