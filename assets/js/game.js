@@ -2,6 +2,9 @@
     HANGMAN SOURCE
     Daniel Orlovsky
     UNCC Coding Bootcamp 08/30/2017
+
+    http://danorlovsky.tech/Articles/Javascript-Hangman-Tutorial
+    
 */
 
 'use strict';
@@ -48,12 +51,49 @@ var loseSound = new Audio('./assets/sounds/you-lose.wav');
 
 startButton.addEventListener('click', startGame);
 
-document.addEventListener("keypress", guessLetter);
+document.addEventListener('keypress', guessLetter);
 
+// Todo version 2:
+// låt användaren enbart gissa bokstäver.
+
+// Checks for a win by seeing if there are any remaining underscores in the guessingword we are building.
+
+// skriv en funktion checkWin som kollar om det är några underscores i guessingWord
+function checkWin() {
+    // kolla i guessingWord efter understreck
+    if (!guessingWord.includes('_')) {
+        // player has won the game!
+        hasFinished = true;
+        document.querySelector('#youwin-image').style="display: block"
+        updatePlayAgain();
+    } else {
+        return
+    }
+    //return !guessingWord.includes('_');
+}
+
+function checkLose() {
+    if (remainingGuesses === 0) {
+        //document.querySelector('#pressKeyTryAgain').style="display: block"
+        hasFinished = true;
+        updatePlayAgain()
+        document.querySelector('#gameover-image').style="display: block"
+    }
+}
+function updatePlayAgain() {
+    if (hasFinished) {
+        // the game is over
+        document.querySelector('#pressKeyTryAgain').style="display: block"
+    } else {
+        document.querySelector('#pressKeyTryAgain').style=""
+    }
+}
 function guessLetter(e) {
+    if (hasFinished) {
+        startGame()
+    } else {
     let currentGuessedLetter = e.key.toUpperCase();
     let hasUserAlreadyGuessedThisLetter = guessedLetters.includes(currentGuessedLetter)
-    //console.log("Letter exists: " + hasUserAlreadyGuessedThisLetter)
     if (hasUserAlreadyGuessedThisLetter) {
         // spelaren har gissat samma bokstav 2 ggr
         return;
@@ -62,46 +102,29 @@ function guessLetter(e) {
         guessedLetters.push(currentGuessedLetter)
     }
 
-    // selectableWords[currentWordIndex]
-    // "TE"
-    // kolla om cGL finns i current word
     const indexOfFirst = selectableWords[currentWordIndex].indexOf(currentGuessedLetter);
     if (indexOfFirst > -1) {
         guessingWord[indexOfFirst] = currentGuessedLetter;
         // bokstav hittad!
-        //console.log("letter found at: " + indexOfFirst)
-        //console.log(selectableWords[currentWordIndex][indexOfFirst])
         const indexOfSecond = selectableWords[currentWordIndex].indexOf(currentGuessedLetter, indexOfFirst + 1);
         if (indexOfSecond > -1) {
             guessingWord[indexOfSecond] = currentGuessedLetter;
         }
         updateCurrentWord();
-        //console.log("second letter found at: " + indexOfSecond)
-        //console.log(selectableWords[currentWordIndex][indexOfSecond])
+
 
     } else {
-        // bokstav ej hittad
-
-
-        // guessingWord = ['_', '_', ...] (TE)
-        // använder chansar på T
-        // om ja
-        // in i lettersguessed
-        // ej minska g remaining
-        // bokstaven ska synas i currentword på rätt ställe(n)
-        // (var det den sista bokstaven som saknades?) 
-
-        // om nej gör vi nedan
         console.log("end of function: " + guessedLetters)
-
         remainingGuesses = remainingGuesses - 1;
         updateGuessesRemaining();
         updateLettersGuessed();
         updateHangmanImg();
     }
+    checkWin();
+    checkLose();
 }
-// skriv en funktion som skriver ut samma antal "_" som det finns
-// tecken i ordet (currentword, det spelaren ska gissa)
+}
+
 function updateCurrentWord() {
     currentWordEl.innerHTML = guessingWord.join("");
 }
@@ -120,13 +143,6 @@ function updateGuessesRemaining() {
     remainingGuessesEl.innerHTML = remainingGuesses;
 }
 
-// skriv en funktion som håller spelaren informerad om antal gissningar som finns kvar
-
-// skriv en funktion som informerar spelaren om vilka bokstäven som redan gissats
-
-
-// Skriv en funktion som körs när vi klickar på Starta spelet-knappen (jag får icke ändra i .html-filen)
-// Reset our game-level variables
 function startGame(e) {
     remainingGuesses = maxTries; // 10
     hasFinished = false;
@@ -139,16 +155,14 @@ function startGame(e) {
     updateLettersGuessed()
     updateGuessesRemaining()
     updateHangmanImg();
+    document.querySelector('#youwin-image').style=""
+    updatePlayAgain()
+    document.querySelector('#gameover-image').style=""
+
 }
 
 function randomWord(arr) {
-    // givet en array arr
-    // slumpa fram ett (number) index i arrayen. 0 <= i < arr.length
-
-    // vad är min desired range?
-    // let myRandomNumber = Math.floor(Math.random() * arr.length);
     return Math.floor(Math.random() * arr.length);
-    // should return an index
 }
 
 
@@ -157,7 +171,7 @@ function randomWord(arr) {
 
 // Updates the image depending on how many guesses
 
-// Checks for a win by seeing if there are any remaining underscores in the guessingword we are building.
+
 
 // Checks for a loss
 
